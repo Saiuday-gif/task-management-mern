@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
 
 const RegisterPage = () => {
   const [name, setName] = useState('');
@@ -9,6 +9,8 @@ const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  const { register } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -17,16 +19,10 @@ const RegisterPage = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post(
-        'https://task-management-mern-1-8cl9.onrender.com/api/auth/register',
-        { name, email, password }
-      );
-
-      if (res.data && res.data.token) {
-        localStorage.setItem('token', res.data.token);
-        localStorage.setItem('user', JSON.stringify(res.data));
-        navigate('/dashboard');
+      if (register) {
+        await register(name, email, password);
       }
+      navigate('/dashboard');
     } catch (err) {
       setError(
         err.response?.data?.message || 'Registration failed. Check connection.'

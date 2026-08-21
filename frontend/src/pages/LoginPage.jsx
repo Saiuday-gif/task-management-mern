@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -8,6 +8,8 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -16,16 +18,10 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post(
-        'https://task-management-mern-1-8cl9.onrender.com/api/auth/login',
-        { email, password }
-      );
-
-      if (res.data && res.data.token) {
-        localStorage.setItem('token', res.data.token);
-        localStorage.setItem('user', JSON.stringify(res.data));
-        navigate('/dashboard');
+      if (login) {
+        await login(email, password);
       }
+      navigate('/dashboard');
     } catch (err) {
       setError(
         err.response?.data?.message || 'Invalid email or password. Please try again.'
