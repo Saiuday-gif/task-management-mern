@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'https://task-management-mern-1-8cl9.onrender.com',
 });
 
 API.interceptors.request.use((config) => {

@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const register = async (name, email, password) => {
-    const res = await axios.post('http://localhost:5000/api/auth/register', {
+    const res = await axios.post('https://task-management-mern-1-8cl9.onrender.com/api/auth/register', {
       name,
       email,
       password,
